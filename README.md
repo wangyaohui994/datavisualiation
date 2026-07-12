@@ -1,81 +1,66 @@
 # Traffic Spatiotemporal Analysis Platform
 
-A desktop traffic-data analysis application built with Qt Designer, PySide6, NumPy, pandas, SciPy, and Matplotlib. The application uses a single entry point and keeps analysis results in memory. Files are written only when the user explicitly saves a chart.
+A PySide6 desktop application for interactive analysis and visualization of spatiotemporal traffic datasets.
 
-## Project structure
+## Requirements
 
-```text
-.
-├── main.py                         # Single application entry point
-├── README.md
-├── requirements.txt
-├── datasets/                       # Source datasets and original metadata
-└── src/
-    ├── __init__.py
-    └── traffic_analysis/
-        ├── __init__.py
-        ├── app.py                  # PySide6 controller and interactive charts
-        ├── data_loader.py          # Discovery, loading, validation, reshaping
-        ├── dataset_profiles.py     # Dataset-specific semantics and defaults
-        ├── preprocessing.py        # Missing values, indexes, imputation
-        ├── analysis.py             # Descriptive and correlation analysis
-        ├── clustering.py           # K-Means road/entity clustering
-        ├── anomaly_detection.py    # Historical Z-score anomaly detection
-        ├── forecasting.py          # HA, linear regression, optional GRU
-        └── ui/
-            ├── __init__.py
-            ├── main_window.ui      # Qt Designer source
-            └── ui_mainwindow.py    # Generated PySide6 UI module
-```
+- Python 3.9 or later
+- Dependencies listed in `requirements.txt`
 
 ## Installation
 
-Python 3.9 or later is recommended.
-
-```powershell
+```bash
 python -m pip install -r requirements.txt
 ```
 
 ## Run
 
-```powershell
+Run the application from the project directory:
+
+```bash
 python main.py
 ```
 
-The configured environment can run the application with:
+The default data directory is `datasets/`. Relative data paths are resolved from the project root, so the application does not depend on machine-specific absolute paths.
 
-```powershell
-D:\miniconda\envs\lora\python.exe main.py
+## Project structure
+
+```text
+main.py
+README.md
+requirements.txt
+datasets/
+src/
+  traffic_analysis/
+    app.py
+    data_loader.py
+    dataset_profiles.py
+    preprocessing.py
+    analysis.py
+    clustering.py
+    anomaly_detection.py
+    forecasting.py
+    ui/
+      main_window.ui
+      ui_mainwindow.py
 ```
 
-## Workflow
+## Main features
 
-1. Select or refresh the `datasets` directory.
-2. Hover over a data source to inspect its type, unit, date mode, and zero-value policy.
-3. Select a source. Variables such as `tensor` and `arr_0` are selected automatically.
-4. Review the dynamically configured date, entity, cluster, anomaly, and missing-value settings.
-5. Click **Load and Analyze Current Data**.
-6. Switch among the ten dynamically named charts. The chart, result table, summary, and inspection tabs update together.
-7. Use **Save Current Chart as PNG** only when a local image is required.
+- Automatic MAT, NPY, and NPZ discovery and validation
+- Dataset-aware dates, units, entity names, and zero-value policies
+- Daily profiles, heatmaps, rankings, distributions, and correlations
+- K-Means clustering and historical Z-score anomaly detection
+- Chronological forecasting evaluation and missing-value imputation tests
+- Bounded computations for large datasets such as California PeMS
+- In-memory chart display with optional user-selected PNG export
 
-## Dataset-aware behavior
+## Qt Designer
 
-- Known absolute dates are configured per dataset. Unknown dates use `Day 001`, `Day 002`, and so on.
-- Weekday/weekend comparisons are disabled when absolute dates are unavailable.
-- Zero-value handling changes by data semantics and remains user-configurable.
-- Two-dimensional continuous time series are reshaped using common daily resolutions.
-- NYC origin-destination tensors are converted to `(OD pair, day, time slot)`.
-- Large California tensors retain all entities for descriptive statistics, ranking, clustering, and profiles. Correlation, distribution, anomaly detail, and imputation evaluation use bounded computations to prevent memory exhaustion.
-- Graph CSV files, adjacency matrices, and notebook helper tables are not presented as analysis-ready time-series sources.
+Edit `src/traffic_analysis/ui/main_window.ui`, then regenerate the Python UI module:
 
-All 25 analysis-ready data files in the repository have passed the complete analysis workflow.
-
-## Regenerate the Qt module
-
-After changing the Designer file, run:
-
-```powershell
+```bash
 pyside6-uic src/traffic_analysis/ui/main_window.ui -o src/traffic_analysis/ui/ui_mainwindow.py
 ```
 
-Do not edit `ui_mainwindow.py` manually; edit `main_window.ui` and regenerate it instead.
+Do not edit `ui_mainwindow.py` manually.

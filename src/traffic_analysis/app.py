@@ -24,6 +24,9 @@ from .anomaly_detection import detect_anomalies
 from .forecasting import evaluate_baselines
 from .dataset_profiles import profile_for
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_DATA_DIR = Path("datasets")
+
 plt.rcParams.update({"font.family":"sans-serif", "font.sans-serif":["Microsoft YaHei","SimHei","Noto Sans SC","DejaVu Sans"],
                      "axes.unicode_minus":False})
 warnings.filterwarnings("ignore",message="Mean of empty slice",category=RuntimeWarning)
@@ -74,11 +77,22 @@ class MainWindow(QMainWindow):
         self.ui.clusterSpin.valueChanged.connect(self._cluster_changed)
 
     def choose_directory(self):
-        path=QFileDialog.getExistingDirectory(self,"Select Data Directory",self.ui.dirEdit.text())
-        if path: self.ui.dirEdit.setText(path); self.refresh_sources()
+        current = self._resolve_data_directory(self.ui.dirEdit.text())
+        path=QFileDialog.getExistingDirectory(self,"Select Data Directory",str(current))
+        if path:
+            selected=Path(path).resolve()
+            try: display=str(selected.relative_to(PROJECT_ROOT))
+            except ValueError: display=str(selected)
+            self.ui.dirEdit.setText(display); self.refresh_sources()
+
+    @staticmethod
+    def _resolve_data_directory(value):
+        """Resolve UI paths relative to the project root, not the process CWD."""
+        path=Path(value.strip()) if value and value.strip() else DEFAULT_DATA_DIR
+        return path.resolve() if path.is_absolute() else (PROJECT_ROOT/path).resolve()
 
     def refresh_sources(self):
-        root=Path(self.ui.dirEdit.text().strip() or "datasets")
+        root=self._resolve_data_directory(self.ui.dirEdit.text())
         # Show analysis tensors only. Graph/adjacency and notebook helper tables
         # are supporting metadata, not road-speed time series.
         self.file_paths=[p for p in scan_datasets(root) if Path(p).suffix.lower() in (".mat",".npy",".npz")

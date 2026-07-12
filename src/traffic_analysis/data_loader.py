@@ -8,6 +8,7 @@ import pandas as pd
 from scipy.io import loadmat
 
 SUPPORTED = (".npz", ".npy", ".mat", ".csv", ".tsv")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass
@@ -20,6 +21,8 @@ class TrafficDataset:
 
 def scan_datasets(base_dir="datasets"):
     base = Path(base_dir)
+    if not base.is_absolute():
+        base = PROJECT_ROOT / base
     return sorted(str(p) for p in base.rglob("*") if p.is_file() and p.suffix.lower() in SUPPORTED) if base.exists() else []
 
 
