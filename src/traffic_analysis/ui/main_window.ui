@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>1440</width><height>900</height></rect></property>
+  <property name="windowTitle"><string>Traffic Spatiotemporal Analysis Platform</string></property>
+  <widget class="QWidget" name="centralwidget"><layout class="QHBoxLayout" name="horizontalLayout"><item><widget class="QSplitter" name="splitter">
+   <property name="orientation"><enum>Qt::Orientation::Horizontal</enum></property>
+   <widget class="QWidget" name="sidebar"><property name="minimumSize"><size><width>330</width><height>0</height></size></property><layout class="QVBoxLayout" name="sideLayout">
+    <item><widget class="QLabel" name="titleLabel"><property name="styleSheet"><string>font-size: 18px; font-weight: 600;</string></property><property name="text"><string>Data and Analysis Controls</string></property></widget></item>
+    <item><widget class="QGroupBox" name="sourceGroup"><property name="title"><string>1. Data Source</string></property><layout class="QVBoxLayout" name="sourceLayout">
+     <item><layout class="QHBoxLayout" name="dirLayout"><item><widget class="QLineEdit" name="dirEdit"><property name="text"><string>datasets</string></property></widget></item><item><widget class="QPushButton" name="browseButton"><property name="text"><string>Browse</string></property></widget></item></layout></item>
+     <item><widget class="QPushButton" name="refreshButton"><property name="text"><string>Refresh Sources</string></property></widget></item>
+     <item><widget class="QListWidget" name="fileList"><property name="minimumSize"><size><width>0</width><height>160</height></size></property></widget></item>
+    </layout></widget></item>
+    <item><widget class="QGroupBox" name="parameterGroup"><property name="title"><string>2. Analysis Parameters</string></property><layout class="QFormLayout" name="parameterLayout">
+     <item row="0" column="0"><widget class="QLabel" name="startLabel"><property name="text"><string>Start date</string></property></widget></item><item row="0" column="1"><widget class="QDateEdit" name="startDateEdit"><property name="date"><date><year>2016</year><month>8</month><day>1</day></date></property><property name="calendarPopup"><bool>true</bool></property><property name="displayFormat"><string>yyyy-MM-dd</string></property></widget></item>
+     <item row="1" column="0"><widget class="QLabel" name="roadLabel"><property name="text"><string>Road ID</string></property></widget></item><item row="1" column="1"><widget class="QSpinBox" name="roadSpin"><property name="maximum"><number>999999</number></property></widget></item>
+     <item row="2" column="0"><widget class="QLabel" name="typicalLabel"><property name="text"><string>Auto road</string></property></widget></item><item row="2" column="1"><widget class="QComboBox" name="typicalCombo"><item><property name="text"><string>Manual road ID</string></property></item><item><property name="text"><string>Lowest mean speed</string></property></item><item><property name="text"><string>Highest mean speed</string></property></item><item><property name="text"><string>Closest to overall mean</string></property></item></widget></item>
+     <item row="3" column="0"><widget class="QLabel" name="dateLabel"><property name="text"><string>Day index</string></property></widget></item><item row="3" column="1"><widget class="QSpinBox" name="dateSpin"><property name="maximum"><number>99999</number></property></widget></item>
+     <item row="4" column="0"><widget class="QLabel" name="clusterLabel"><property name="text"><string>Clusters</string></property></widget></item><item row="4" column="1"><widget class="QSpinBox" name="clusterSpin"><property name="minimum"><number>2</number></property><property name="maximum"><number>30</number></property><property name="value"><number>4</number></property></widget></item>
+     <item row="5" column="0"><widget class="QLabel" name="zLabel"><property name="text"><string>Anomaly Z threshold</string></property></widget></item><item row="5" column="1"><widget class="QDoubleSpinBox" name="zSpin"><property name="minimum"><double>1.000000000000000</double></property><property name="maximum"><double>10.000000000000000</double></property><property name="singleStep"><double>0.500000000000000</double></property><property name="value"><double>3.000000000000000</double></property></widget></item>
+     <item row="6" column="0" colspan="2"><widget class="QCheckBox" name="zeroMissingCheck"><property name="text"><string>Treat zero as suspected missing</string></property></widget></item>
+    </layout></widget></item>
+    <item><widget class="QPushButton" name="analyzeButton"><property name="minimumSize"><size><width>0</width><height>38</height></size></property><property name="styleSheet"><string>font-weight: 600;</string></property><property name="text"><string>Load and Analyze Current Data</string></property></widget></item>
+    <item><widget class="QGroupBox" name="chartGroup"><property name="title"><string>3. Analysis Charts</string></property><layout class="QVBoxLayout" name="chartLayout"><item><widget class="QListWidget" name="chartList"><property name="minimumSize"><size><width>0</width><height>190</height></size></property></widget></item></layout></widget></item>
+    <item><widget class="QPushButton" name="saveFigureButton"><property name="text"><string>Save Current Chart as PNG...</string></property></widget></item>
+   </layout></widget>
+   <widget class="QTabWidget" name="resultTabs">
+    <widget class="QWidget" name="chartTab"><attribute name="title"><string>Chart</string></attribute><layout class="QVBoxLayout" name="plotLayout"/></widget>
+    <widget class="QWidget" name="summaryTab"><attribute name="title"><string>Analysis Summary</string></attribute><layout class="QVBoxLayout" name="summaryLayout"><item><widget class="QPlainTextEdit" name="summaryText"><property name="readOnly"><bool>true</bool></property></widget></item></layout></widget>
+    <widget class="QWidget" name="tableTab"><attribute name="title"><string>Result Table</string></attribute><layout class="QVBoxLayout" name="tableLayout"><item><widget class="QLabel" name="tableHint"><property name="text"><string>The result table follows the selected analysis chart.</string></property></widget></item><item><widget class="QTableView" name="tableView"><property name="sortingEnabled"><bool>true</bool></property></widget></item></layout></widget>
+    <widget class="QWidget" name="qualityTab"><attribute name="title"><string>Data Inspection</string></attribute><layout class="QVBoxLayout" name="qualityLayout"><item><widget class="QPlainTextEdit" name="qualityText"><property name="readOnly"><bool>true</bool></property></widget></item></layout></widget>
+   </widget>
+  </widget></item></layout></widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/><connections/>
+</ui>
